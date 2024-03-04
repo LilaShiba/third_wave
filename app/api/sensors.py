@@ -6,12 +6,10 @@ from app.utils.rpi import Sensors
 
 def register_sensors_routes(api_bp: Blueprint) -> None:
 
-
     def run_manual_sensor_background(sensor, time_stop, hertz):
         '''Wrapper function to run sensor in a background thread.'''
         sensor.manual_run_sensor(time_stop=time_stop, hertz=hertz)
 
-    
     @api_bp.route('/sensors', methods=['GET'])
     def get_sensor() -> jsonify:
         try:
@@ -31,4 +29,3 @@ def register_sensors_routes(api_bp: Blueprint) -> None:
         except ValueError as e:
             logging.error(f"Error processing request: {e}")
             return jsonify({"error": str(e)}), 400
-

@@ -25,19 +25,20 @@ class Sensors:
 
         # Initialize sensors
         self.movement_sensors: LSM9DS1_I2C = LSM9DS1_I2C(i2c)
-        #self.light_sensor: TSL2591 = TSL2591(i2c)
+        self.light_sensor: TSL2591 = TSL2591(i2c)
 
-    def read_i2c_sensor(self) -> Dict[str, Any]:
+    def read_i2c_bus(self) -> Dict[str, Any]:
         """Read I2C sensors on RPi's bus (SCL, SDA)"""
         sensor_data: Dict[str, Any] = {
             "acceleration": list(self.movement_sensors.acceleration),
             "magnetic": list(self.movement_sensors.magnetic),
             "gyro": list(self.movement_sensors.gyro),
-            # "light_sensor": {
-            #     "lux": self.light_sensor.lux,
-            #     "infrared": self.light_sensor.infrared,
-            #     "visible": self.light_sensor.visible
-            # }
+            "light_sensor": {
+                "lux": self.light_sensor.lux,
+                "infrared": self.light_sensor.infrared,
+                "visible": self.light_sensor.visible,
+                "full-spectrum": self.light_sensor.visible + self.light_sensor.infrrared
+            }
         }
         return sensor_data
 
@@ -49,18 +50,21 @@ class Sensors:
 
     def manual_run_sensor(self, time_stop: int, hertz: float = 1.0) -> None:
         """Runs sensor for X frames once per second"""
-        logging.info(f"Starting sensor data collection for {time_stop} seconds at {hertz} hertzs.")
+        logging.info(
+            f"Starting sensor data collection for {time_stop} seconds at {hertz} hertzs.")
         try:
             with open('manual_sensor_data.csv', mode='w', newline='') as file:
-                first_res: Dict[str, Any] = self.read_i2c_sensor()
-                fieldnames: list = ['timestamp', 'id', 'hertz'] + list(first_res.keys())
-                writer: csv.DictWriter = csv.DictWriter(file, fieldnames=fieldnames)
+                first_res: Dict[str, Any] = self.read_i2c_bus()
+                fieldnames: list = ['timestamp', 'id',
+                                    'hertz'] + list(first_res.keys())
+                writer: csv.DictWriter = csv.DictWriter(
+                    file, fieldnames=fieldnames)
                 writer.writeheader()
                 hertz_interval: float = 1 / hertz
                 frames: float = time.time() + time_stop
                 while time.time() < frames:
                     sample_start: float = time.time()
-                    res: Dict[str, Any] = self.read_i2c_sensor()
+                    res: Dict[str, Any] = self.read_i2c_bus()
                     res['timestamp'] = datetime.now().isoformat()
                     res['id'] = self.sensor_pin
                     res['hertz'] = hertz
@@ -73,7 +77,8 @@ class Sensors:
                     if remaining_time > 0:
                         time.sleep(remaining_time)
                     else:
-                        print("Warning: Processing took longer than the sample interval")
+                        print(
+                            "Warning: Processing took longer than the sample interval")
                         time.sleep(hertz_interval)
             logging.info("Manual Sensor data collection complete.")
         except Exception as e:
