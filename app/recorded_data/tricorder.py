@@ -23,23 +23,25 @@ def record_sensor_data(csv_file_path, duration_seconds):
         writer = csv.writer(file)
         writer.writerow(['Timestamp', 'Accel_X', 'Accel_Y', 'Accel_Z',
                          'Gyro_X', 'Gyro_Y', 'Gyro_Z', 'Mag_X', 'Mag_Y', 'Mag_Z',
-                         'Lux', 'IR', 'Full_Spectrum'])
+                         'Lux', 'IR', 'Full_Spectrum', 'Gain', 'Temp'])
 
         while datetime.now() < end_time:
             # Read data from LSM9DS1 (Accel, Gyro, Mag)
             accel_x, accel_y, accel_z = sensor_lsm9ds1.acceleration
             gyro_x, gyro_y, gyro_z = sensor_lsm9ds1.gyro
             mag_x, mag_y, mag_z = sensor_lsm9ds1.magnetic
+            temp = sensor_lsm9ds1.temperature
 
             # Read data from TSL2591 (Lux, IR, Full Spectrum)
             lux = sensor_tsl2591.lux if sensor_tsl2591.lux is not None else 0
             infrared = sensor_tsl2591.infrared
-            full_spectrum = sensor_tsl2591.visible + infrared
+            full_spectrum = sensor_tsl2591.full_spectrum
+            gain = sensor_lsm9ds1.gain
 
             timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
             writer.writerow([timestamp, accel_x, accel_y, accel_z,
                              gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z,
-                             lux, infrared, full_spectrum])
+                             lux, infrared, full_spectrum, gain, temp])
 
             time.sleep(1)
 
