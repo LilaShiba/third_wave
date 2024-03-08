@@ -6,7 +6,7 @@ After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Fedora IoT was chosen 
 
 ## Documentation Links ❤️🔥⚡
 
-- **Main Landing Page** ❤️✨: [Readme.md](https://github.com/LilaShiba/third_wave/edit/main/readme.md)
+- **Main Landing Page** ❤️✨: [Readme.md](https://github.com/LilaShiba/third_wave/main/readme.md)
 - **RPI Board** ⚡: [RPI Documentation](https://github.com/LilaShiba/third_wave/blob/main/board_readme.md)
 - **OS Choice** 🌟: [os.md](https://github.com/LilaShiba/third_wave/blob/main/os.md)
 
