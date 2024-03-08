@@ -28,6 +28,7 @@ def record_sensor_data(csv_file_path, duration_seconds):
 
         while datetime.now() < end_time:
             # Read data from LSM9DS1 (Accel, Gyro, Mag)
+            start_time = datetime.now()
             accel_x, accel_y, accel_z = sensor_lsm9ds1.acceleration
             gyro_x, gyro_y, gyro_z = sensor_lsm9ds1.gyro
             mag_x, mag_y, mag_z = sensor_lsm9ds1.magnetic
@@ -44,6 +45,9 @@ def record_sensor_data(csv_file_path, duration_seconds):
                              gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z,
                              lux, infrared, full_spectrum, temp, humidity])
 
+
+            # end_time = datetime.now()
+            # time_left = end_time-start_time
             time.sleep(1)
 
 

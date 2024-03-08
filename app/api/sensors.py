@@ -22,13 +22,13 @@ def register_sensors_routes(api_bp: Blueprint) -> None:
 
             #sensor = Sensors(sensor_id)
             csv_file_path = './sensor_data_' + datetime.now().strftime('%Y-%m-%dT%H:%M') + '.csv'
-            run_manual_sensor_background(csv_file_path, time_stop, hertz)
-            # thread = Thread(target=run_manual_sensor_background,
-            #                 args=(sensor_id, time_stop, hertz))
-            # thread.start()
+            #Srun_manual_sensor_background(csv_file_path, time_stop, hertz)
+            thread = Thread(target=run_manual_sensor_background,
+                            args=(sensor_id, time_stop, hertz))
+            thread.start()
 
             logging.info(f'Sensor data collection initiated: {request.args}')
-            return jsonify({"message": "Sensor run initiated"}), 202
+            return jsonify({"message": "Sensor run initiated"}), 200
 
         except ValueError as e:
             logging.error(f"Error processing request: {e}")
