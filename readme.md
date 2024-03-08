@@ -1,42 +1,45 @@
 # 🌈🤖 RPI Server Documentation 🌟🔧
 
-After research and experimentation with Raspbian, Ubuntu, and Fedora, Fedora IoT was selected for its lightweight and high reliability ratio. Raspbian presented many issues interfacing with I2C. Ubuntu was too clunky. FIoT was just right 🌟
+## OS Selection for RPI 🌟
 
-Documentation for Raspbian is provided as it is only a matter of time before they fix these errors, mainly the remapping of the gpio module to rpi5s new structure.
+After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Fedora IoT was chosen for its optimal balance of lightweight design and reliability. Raspbian encountered issues with I2C interfacing, and Ubuntu was deemed too resource-intensive. Documentation for Raspbian is retained in anticipation of future improvements.
 
-## Navigation Table ❤️🔥⚡
+## Documentation Links ❤️🔥⚡
 
-| Document Title              | Link                                                                                      |
-|-----------------------------|-------------------------------------------------------------------------------------------|
-| **Main Landing Page** ❤️✨  | [Readme.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/readme.md)            |
-| **Sensor Setup Guide** 🔥   | [build_instructions.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/build_instructions.md) |
-| **RPI Server Documentation**⚡| [RPI Server Documentation](https://github.com/LilaShiba/flask_server_ubi/blob/main/board_readme.md)    |
-| **OS Choice** 🌟            | [os.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/os.md)                    |
+- **Main Landing Page** ❤️✨: [Readme.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/readme.md)
+- **Sensor Setup Guide** 🔥: [build_instructions.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/build_instructions.md)
+- **RPI Server Documentation** ⚡: [RPI Server Documentation](https://github.com/LilaShiba/flask_server_ubi/blob/main/board_readme.md)
+- **OS Choice** 🌟: [os.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/os.md)
 
+## High-Level System Overview ✨
 
-## ✨ High Lvl Overview ✨
+![System Architecture](imgs/high_lvl.svg)
 
-![high_lvl](imgs/high_lvl.svg)
+### Sensor Integration
 
-| Adafruit LSM9DS1 | Adafruit TSL2591 | MAX4466 |
-|:----------------:|:----------------:|:-------:|
-| **Accelerometer + Gyro + Magnetometer** | **Ultra-high-range luminosity sensor** | *Microphone** |
-| [![Adafruit LSM9DS1](imgs/big_boi.jpeg)](https://learn.adafruit.com/adafruit-lsm9ds1-accelerometer-plus-gyro-plus-magnetometer-9-dof-breakout/pinouts) | [![Adafruit TSL2591](imgs/light.jpeg)](https://learn.adafruit.com/adafruit-tsl2591) | [![MAX4466](imgs/sound.jpeg)](https://learn.adafruit.com/adafruit-tsl2591) |
+- **Adafruit LSM9DS1:** Accelerometer, Gyro, Magnetometer [Info](https://learn.adafruit.com/adafruit-lsm9ds1-accelerometer-plus-gyro-plus-magnetometer-9-dof-breakout/pinouts)
+- **Adafruit TSL2591:** Ultra-high-range luminosity sensor [Info](https://learn.adafruit.com/adafruit-tsl2591)
+- **MAX4466:** Microphone [Info](https://learn.adafruit.com/adafruit-tsl2591)
 
+### Hardware Connection Guide
 
-## Wiring
+[Hardware Wiring Instructions](https://www.circuito.io/app?components=639,9443,44359,200000,779831)
 
-<a href="https://www.circuito.io/app?components=639,9443,44359,200000,779831"><img src="imgs/board.png"></a>
+## Development Guide 🛠🧰
 
-## 🛠 Connect Hardware 🧰
+### Connecting Hardware
 
-- **File Path:** `app/utils/rpi.py`
-  - 🪄✨ This module acts as the bridge between your Raspberry Pi and the hardware components. It harbors all the functions needed to converse with sensors, actuators, and other devices tethered to your RPI.
+- **Module:** `app/utils/rpi.py`
+  - Acts as the bridge for communication with I2C sensors and devices connected to the Raspberry Pi.
 
-## 🚦 Route Data 🛤
+### Expanding the Application
 
-- **File Path:** `app/api/new_route.py`
-  - 🌌 To expand app, add new routes, and register in app/__init__
+- **Module:** `app/api/new_route.py`
+  - Implement new routes here and register them within `app/__init__.py`.
+
+### Running the Application 🚀
+
+1. Install dependencies:
 
 ## 🚀 Run App 🎮
 
@@ -63,63 +66,75 @@ Documentation for Raspbian is provided as it is only a matter of time before the
 
 # 🔌 API Endpoints 🎇
 
-## 🌡 Get Sensor Data 🌟
+# Sensor Data Collection API Documentation ✨🧙‍♀️✨
 
-Note: All sensor IDs are numerical.
+This documentation provides details on the `/sensors` endpoint of our Flask application, designed for initiating sensor data collection asynchronously, with sensors communicating over the I2C bus.
 
-- **Request Example:**
+## Overview
 
-  <pre><code>
-  # GET /api/sensors?sensor_id=13&time_stop=45&hertz=50
-  # Host: 127.0.0.1:8000
-  http://127.0.0.1:8000//api/sensors?sensor_id=13&time_stop=45&hertz=50
+Sensors connected via the I2C bus can be controlled and their data collected through this API. The I2C bus allows multiple sensors to be connected to the same bus lines, each sensor having a unique address.
 
-  </code></pre>
+## Registering Sensor Routes
 
-```python
-  import requests
-  
-  url = "http://127.0.0.1:8000/api/sensors"
-  params = {
-            'sensor_id': 1,
-            'time_stop': 45,
-            'hertz': 50
-            }
-  
-  response = requests.get(url, params=params)
-  
-  if response.status_code == 200:
-      print("Yay!")
-      print(response.json())
+To make the sensor data collection endpoint available, we first register it with a Flask `Blueprint`. This is accomplished in the `register_sensors_routes` function, which accepts a `Blueprint` instance as an argument.
 
-```
+<pre><code>def register_sensors_routes(api_bp: Blueprint) -> None:
+    ...
+</code></pre>
 
-- 📊 This snippet demonstrates how to query sensor data and control the hardware
+## Endpoint Details
 
-## ⚙️ Get Actuator Status
+- **URL:** `/sensors`
+- **Method:** `GET`
+- **Auth Required:** No
+- **Permissions Required:** None
 
-Note: All actuator IDs are letters.
+## Query Parameters
 
-- **Request Example:**
+- `sensor_id` (int): The ID of the sensor to collect data from, corresponding to its I2C address. (Required)
+- `time_stop` (int): Duration in seconds for how long the sensor data collection should run. (Required)
+- `hertz` (int): The frequency at which data should be collected, affecting how data is read from the I2C bus. (Optional)
 
-  <pre><code>
-  # GET /api/actuators?actuator_id=A HTTP/1.1
-  # Host: 127.0.0.1:8000
-  http://127.0.0.1:8000/api/actuators?actuator_id=A
-  </code></pre>
+## Success Response
 
-```python  
+- **Code:** 200 OK
+- **Content example:**
 
-  import requests
-  
-  url = "http://127.0.0.1:8000/api/actuators"
-  params = {'actuator_id': 'A'}  # Note: Adjust the actuator_id as needed
-  
-  response = requests.get(url, params=params)
-  
-  if response.status_code == 200:
-      print("Success:")
-      print(response.json())
-```
+<pre><code>{
+  "message": "Sensor run initiated"
+}
+</code></pre>
 
-- 🛠 This example shows how to fetch the status of an actuator by its ID. It's crucial to replace the placeholder with the actual actuator ID in your requests.
+## Error Response
+
+- **Code:** 400 BAD REQUEST
+- **Content example:**
+
+<pre><code>{
+  "error": "Error description"
+}
+</code></pre>
+
+## Example Queries
+
+1. **Initiating Sensor Data Collection**
+
+To start collecting data from a sensor with ID 1 for 60 seconds, send a GET request to the `/sensors` endpoint with the required query parameters:
+
+<pre><code>GET /sensors?sensor_id=1&time_stop=60</code></pre>
+
+2. **Specifying Data Collection Frequency**
+
+To specify the frequency of data collection, include the `hertz` parameter in your query:
+
+<pre><code>GET /sensors?sensor_id=1&time_stop=60&hertz=5</code></pre>
+
+This request collects data from sensor ID 1 for 60 seconds at a frequency of 5 Hz.
+
+## Notes on I2C Communication
+
+- Sensors on the I2C bus are addressed using their unique I2C addresses. Ensure the `sensor_id` matches the sensor's I2C address.
+- The I2C bus allows for efficient communication with multiple sensors, but care must be taken to manage bus traffic and avoid collisions.
+- The `hertz` parameter can influence how often the I2C bus is queried, which is crucial for sensors that require time to refresh their data.
+
+✨🧙‍♀️✨
