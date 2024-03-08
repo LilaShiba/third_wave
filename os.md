@@ -6,17 +6,9 @@ Documentation for Raspbian is provided as it is only a matter of time before the
 
 
 ## Navigation Table ❤️🔥⚡
-
-| Document Title              | Link                                                                                      |
-|-----------------------------|-------------------------------------------------------------------------------------------|
-| **Main Landing Page** ❤️✨  | [Readme.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/readme.md)            |
-| **Sensor Setup Guide** 🔥   | [build_instructions.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/build_instructions.md) |
-| **RPI Server Documentation**⚡| [RPI Server Documentation](https://github.com/LilaShiba/flask_server_ubi/blob/main/board_readme.md)    |
-| **OS Choice** 🌟            | [os.md](https://github.com/LilaShiba/flask_server_ubi/blob/main/os.md)                    |
-
-
-
-
+- **Main Landing Page** ❤️✨: [Readme.md](https://github.com/LilaShiba/third_wave/blob/main/readme.md)
+- **RPI Board** ⚡: [RPI Documentation](https://github.com/LilaShiba/third_wave/blob/main/board_readme.md)
+- **OS Choice** 🌟: [os.md](https://github.com/LilaShiba/third_wave/blob/main/os.md)
 
 
 ## 🚀 Getting Started
