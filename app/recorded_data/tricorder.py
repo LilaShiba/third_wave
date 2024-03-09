@@ -8,6 +8,8 @@ import adafruit_lsm9ds1
 import adafruit_dht
 from gpiozero import Button
 from typing import Tuple
+import digitalio 
+
 
 # Initialize I2C connection
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -18,7 +20,7 @@ sensor_lsm9ds1 = adafruit_lsm9ds1.LSM9DS1_I2C(i2c)
 #sensor_dht11 = adafruit_dht.DHT11(board.D16)
 
 # Initialize GPIO pin for the flip switch (using GPIO pin 17 as an example)
-flip_switch = Button(4)
+flip_switch = Button(17)
 
 def read_lsm9ds1() -> Tuple[float, float, float, float, float, float, float]:
     """Reads data from the LSM9DS1 sensor."""
@@ -50,6 +52,7 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int) -> None:
             lux, infrared, full_spectrum = read_tsl2591()
             #humidity = sensor_dht11.humidity
             switch_pressed = 1 if flip_switch.is_pressed else 0
+
 
             writer.writerow([timestamp, accel_x, accel_y, accel_z,
                              gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z,
