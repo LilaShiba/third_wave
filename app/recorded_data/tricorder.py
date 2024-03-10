@@ -37,17 +37,18 @@ def read_tsl2591() -> Tuple[float, int, int]:
     full_spectrum = sensor_tsl2591.full_spectrum
     return lux, infrared, full_spectrum
 
-def record_sensor_data(csv_file_path: str, duration_seconds: int) -> None:
+def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1) -> None:
     """Records real sensor data to a CSV file."""
-    end_time = datetime.now() + timedelta(seconds=duration_seconds)
+    end_time_loop = datetime.now() + timedelta(seconds=duration_seconds)
     with open(csv_file_path, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Timestamp', 'Accel_X', 'Accel_Y', 'Accel_Z',
                          'Gyro_X', 'Gyro_Y', 'Gyro_Z', 'Mag_X', 'Mag_Y', 'Mag_Z',
                          'Lux', 'IR', 'Full_Spectrum', 'Temp', 'Switch_Pressed'])
 
-        while datetime.now() < end_time:
+        while datetime.now() < end_time_loop:
             timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+            start_time = datetime.now()
             accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z, temp = read_lsm9ds1()
             lux, infrared, full_spectrum = read_tsl2591()
             #humidity = sensor_dht11.humidity
@@ -57,11 +58,14 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int) -> None:
             writer.writerow([timestamp, accel_x, accel_y, accel_z,
                              gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z,
                              lux, infrared, full_spectrum, temp, switch_pressed])
+            end_time = datetime.now()
+            remaining_time = end_time - start_time
+            remaining_seconds = remaining_time.total_seconds()
+            time.sleep(remaining_seconds)
 
-            time.sleep(1)  # Adjust based on your needs
 
 if __name__ == "__main__":
     csv_file_path = f'./sensor_data_{datetime.now().strftime("%Y-%m-%dT%H:%M")}.csv'
     duration_seconds = 260  # For example, record data for 4 minutes and 20 seconds
-    record_sensor_data(csv_file_path, duration_seconds)
+    record_sensor_data(csv_file_path, duration_seconds, 50)
     print(f'Data recorded to {csv_file_path}')
