@@ -13,7 +13,7 @@ from typing import Tuple
 # Initialize I2C connection
 i2c = busio.I2C(board.SCL, board.SDA)
 
-# Initialize sensors
+# Initialize a bunch of sensors
 sensor_lsm9ds1 = adafruit_lsm9ds1.LSM9DS1_I2C(i2c)
 sensor_apds9960 = adafruit_apds9960.apds9960.APDS9960(i2c)
 sensor_bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c)
@@ -23,9 +23,9 @@ sensor_apds9960.enable_proximity = True
 sensor_apds9960.enable_color = True
 
 # Initialize GPS module with I2C
-gps = adafruit_gps.GPS_GtopI2C(i2c, debug=False)  # Adjust debug as needed
+gps = adafruit_gps.GPS_GtopI2C(i2c, debug=False)  
 
-# Initialize GPIO pin for the flip switch (using GPIO pin 17 as an example)
+# Initialize pin for flip switch ( 17 )
 flip_switch = Button(17)
 
 def read_lsm9ds1() -> Tuple[float, float, float, float, float, float, float, float, float, float]:
@@ -96,6 +96,6 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1
 
 if __name__ == "__main__":
     csv_file_path = f'./sensor_data_{datetime.now().strftime("%Y-%m-%dT%H:%M")}.csv'
-    duration_seconds = 260  # Example duration
+    duration_seconds = 11260  # Example duration 4:20 Mins
     record_sensor_data(csv_file_path, duration_seconds, 60)  # Example frequency
     print(f'Data recorded to {csv_file_path}')
