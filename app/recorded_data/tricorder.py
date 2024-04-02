@@ -77,6 +77,25 @@ def read_gps() -> Tuple[float, float, float, str]:
     timestamp_str = f"{timestamp.tm_hour}:{timestamp.tm_min}:{timestamp.tm_sec}" if timestamp else "N/A"
     return latitude, longitude, speed, timestamp_str
 
+def init_trellis():
+        # Initialize NeoTrellis buttons
+    for i in range(16):
+        trellis.activate_key(i, NeoTrellis.EDGE_RISING)
+        trellis.activate_key(i, NeoTrellis.EDGE_FALLING)
+        trellis.callbacks[i] = blink
+        trellis.pixels[i] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+def env_check(humidity, pressure):
+    if humidity > 40:
+        trellis.pixels[0] = (random.randint(150, 255), 0,0)
+    else:
+        trellis.pixels[0] = (0, random.randint(150, 255),0)
+            
+    if pressure > 1400:
+        trellis.pixels[1] = (random.randint(150, 255), 0,0)
+    else:
+        trellis.pixels[1] = (0, random.randint(150, 255),0)
+
 
 def blink(event):
     """Handles button press events."""
@@ -96,12 +115,7 @@ def blink(event):
 
 def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1) -> None:
     """Records real sensor data to a CSV file, including GPS data."""
-    # Initialize NeoTrellis buttons
-    for i in range(16):
-        trellis.activate_key(i, NeoTrellis.EDGE_RISING)
-        trellis.activate_key(i, NeoTrellis.EDGE_FALLING)
-        trellis.callbacks[i] = blink
-        trellis.pixels[i] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    init_trellis()
 
     # Set end time
     end_time_loop = datetime.now() + timedelta(seconds=duration_seconds)
@@ -140,12 +154,16 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1
                              gas, humidity, pressure, switch_pressed,
                              latitude, longitude, speed, gps_timestamp, any_key_pressed])
 
+            # ENV triggers
+            env_check(humidity, pressure)
+
             # Calculate remaining time and sleep
+        
             end_time = datetime.now()
             remaining_time = (1 / hertz) - (end_time - datetime.now()).total_seconds()
             if remaining_time > 0:
                 time.sleep(remaining_time)
-                
+                        
             # if random.random() < 0.1:
             #         for i in range(16):
             #             trellis.activate_key(i, NeoTrellis.EDGE_RISING)
@@ -153,8 +171,7 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1
             #             trellis.callbacks[i] = blink
             #             trellis.pixels[i] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-            if humidity > 0.40:
-                trellis.pixels[i] = (random.randint(0, 255), 0,0)
+
                 
 
 
