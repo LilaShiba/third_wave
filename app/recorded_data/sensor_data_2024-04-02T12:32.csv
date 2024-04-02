@@ -1,0 +1,1 @@
+Timestamp,Accel_X,Accel_Y,Accel_Z,Gyro_X,Gyro_Y,Gyro_Z,Mag_X,Mag_Y,Mag_Z,LSM9DS1_Temp,Proximity,Color_R,Color_G,Color_B,Color_C,BME680_Temp,Gas,Humidity,Pressure,Switch_Pressed,GPS_Latitude,GPS_Longitude,GPS_Speed,GPS_Timestamp,Pad_press
