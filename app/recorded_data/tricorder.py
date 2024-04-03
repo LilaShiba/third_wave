@@ -8,7 +8,7 @@ import adafruit_apds9960.apds9960
 import adafruit_bme680
 import adafruit_gps
 from gpiozero import Button
-from typing import Tuple
+from typing import *
 from adafruit_neotrellis.neotrellis import NeoTrellis
 import random
 
@@ -81,23 +81,67 @@ def init_trellis():
         trellis.activate_key(i, NeoTrellis.EDGE_RISING)
         trellis.activate_key(i, NeoTrellis.EDGE_FALLING)
         trellis.callbacks[i] = blink
-        trellis.pixels[i] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        #trellis.pixels[i] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-def env_check(humidity, pressure, lux):
-    if humidity > 40:
-        trellis.pixels[0] = (random.randint(150, 255), 0,0)
-    else:
-        trellis.pixels[0] = (0, random.randint(150, 255),0)
-            
-    if pressure > 1400:
-        trellis.pixels[1] = (random.randint(150, 255), 0,0)
-    else:
-        trellis.pixels[1] = (0, random.randint(150, 255),0)
 
-    if lux >= 400:
-        trellis.pixels[2] = (random.randint(150, 255), 0,0)
+def generate_color(value: float, max_value: float) -> Tuple[int, int, int]:
+    """
+    Generate a color based on the value and max_value.
+
+    Args:
+        value (float): The sensor value.
+        max_value (float): The maximum threshold for the sensor value.
+
+    Returns:
+        Tuple[int, int, int]: The RGB color tuple.
+    """
+    # Calculate the color components
+    red = int((value / max_value) * 255)
+    green = int(((max_value - value) / max_value) * 255)
+    blue = 255
+
+    # Clamp the color components to the valid range (0-255)
+    red = max(0, min(red, 255))
+    green = max(0, min(green, 255))
+
+    return red, green, blue
+def env_check(humidity: float, pressure: float, lux: float, gas: float,
+              proximity: float, gps: Optional[Tuple[float, float]]) -> None:
+    """
+    Checks environmental parameters and updates indicator lights accordingly.
+
+    Args:
+        humidity (float): The humidity level.
+        pressure (float): The pressure level.
+        lux (float): The lux level.
+        gas (float): The gas level.
+        proximity (float): The proximity level.
+        gps (Optional[Tuple[float, float]]): The GPS coordinates (latitude, longitude).
+
+    Returns:
+        None
+    """
+    # Define max values for each sensor
+    max_values = {
+        'humidity': 100,  # Example max value for humidity
+        'pressure': 5000,  # Example max value for pressure
+        'lux': 5000,  # Example max value for lux
+        'gas': 200000,  # Example max value for gas
+        'proximity': 10  # Example max value for proximity
+    }
+
+    # Update indicator lights based on sensor values
+    trellis.pixels[0] = generate_color(humidity, max_values['humidity'])
+    trellis.pixels[1] = generate_color(pressure, max_values['pressure'])
+    trellis.pixels[2] = generate_color(lux, max_values['lux'])
+    trellis.pixels[3] = generate_color(gas, max_values['gas'])
+    trellis.pixels[4] = generate_color(proximity, max_values['proximity'])
+
+    # Handle GPS separately
+    if gps is None:
+        trellis.pixels[15] = (random.randint(0, 50), 0, random.randint(200, 255))
     else:
-        trellis.pixels[2] = (0, random.randint(150, 255),0)
+        trellis.pixels[15] = (random.randint(200, 255), 0, 0)
 
 def blink(event):
     """Handles button press events."""
@@ -159,7 +203,7 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1
 
             # ENV triggers
             if idx % 100:
-                env_check(humidity, pressure, lux)
+                env_check(humidity, pressure, lux, gas, proximity, latitude)
 
             # Calculate remaining time and sleep
         
