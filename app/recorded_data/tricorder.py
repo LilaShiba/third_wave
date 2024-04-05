@@ -86,7 +86,7 @@ def init_trellis():
 
 def generate_color(value: float, max_value: float) -> Tuple[int, int, int]:
     """
-    Generate a color based on the value and max_value.
+    Generate a color based on the value and max_value using the colors of the Transgender Pride flag.
 
     Args:
         value (float): The sensor value.
@@ -98,15 +98,44 @@ def generate_color(value: float, max_value: float) -> Tuple[int, int, int]:
     # Calculate the color components
     red = int((value / max_value) * 255)
     green = int(((max_value - value) / max_value) * 255)
-    blue = 255
+    blue = 125  # Fixed blue component for Transgender Pride flag
 
     # Clamp the color components to the valid range (0-255)
     red = max(0, min(red, 255))
     green = max(0, min(green, 255))
 
     return red, green, blue
+
+def pretty_stars() -> None:
+    """
+    Set random warm colors (excluding red) for pixels 5 to 9.
+
+    Returns:
+        None
+    """
+    def generate_warm_color() -> Tuple[int, int, int]:
+        """
+        Generate a random warm color (excluding red).
+
+        Returns:
+            Tuple[int, int, int]: The RGB color tuple.
+        """
+        # Generate random warm colors
+        red = random.randint(0, 100)
+        green = random.randint(100, 255)
+        blue = random.randint(100, 255)
+
+        return red, green, blue
+
+    # Assign random warm colors to pixels 5 to 9
+    for i in range(8, 15):
+        if random.random() > 0.99:
+            trellis.pixels[i] = generate_warm_color()
+            trellis.pixels[i] = OFF
+
+
 def env_check(humidity: float, pressure: float, lux: float, gas: float,
-              proximity: float, gps: Optional[Tuple[float, float]]) -> None:
+              proximity: float, b: int, gps: Optional[Tuple[float, float]]) -> None:
     """
     Checks environmental parameters and updates indicator lights accordingly.
 
@@ -116,6 +145,7 @@ def env_check(humidity: float, pressure: float, lux: float, gas: float,
         lux (float): The lux level.
         gas (float): The gas level.
         proximity (float): The proximity level.
+        b (int): An additional condition for handling the GPS indicator light.
         gps (Optional[Tuple[float, float]]): The GPS coordinates (latitude, longitude).
 
     Returns:
@@ -123,25 +153,26 @@ def env_check(humidity: float, pressure: float, lux: float, gas: float,
     """
     # Define max values for each sensor
     max_values = {
-        'humidity': 100,  # Example max value for humidity
-        'pressure': 5000,  # Example max value for pressure
+        'humidity': 60,  # Example max value for humidity
+        'pressure': 1500,  # Example max value for pressure
         'lux': 5000,  # Example max value for lux
-        'gas': 200000,  # Example max value for gas
-        'proximity': 10  # Example max value for proximity
+        'gas': 130000,
+        'proximity': 14  # Example max value for proximity
     }
 
     # Update indicator lights based on sensor values
     trellis.pixels[0] = generate_color(humidity, max_values['humidity'])
     trellis.pixels[1] = generate_color(pressure, max_values['pressure'])
-    trellis.pixels[2] = generate_color(lux, max_values['lux'])
-    trellis.pixels[3] = generate_color(gas, max_values['gas'])
+    trellis.pixels[2] = generate_color(gas, max_values['gas'])
+    trellis.pixels[3] = generate_color(lux, max_values['lux'])
     trellis.pixels[4] = generate_color(proximity, max_values['proximity'])
 
     # Handle GPS separately
-    if gps is None:
-        trellis.pixels[15] = (random.randint(0, 50), 0, random.randint(200, 255))
-    else:
-        trellis.pixels[15] = (random.randint(200, 255), 0, 0)
+    if gps is not None:
+        #trellis.pixels[15] = (random.randint(0, 50), 0, random.randint(200, 255))
+        pretty_stars()
+
+
 
 def blink(event):
     """Handles button press events."""
@@ -203,7 +234,10 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1
 
             # ENV triggers
             if idx % 100:
-                env_check(humidity, pressure, lux, gas, proximity, latitude)
+                env_check(humidity, pressure, lux, gas, proximity, idx, latitude)
+                #trellis.brightness = random.uniform(0.9, 1)
+
+
 
             # Calculate remaining time and sleep
         
