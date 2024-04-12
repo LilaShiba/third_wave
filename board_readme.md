@@ -74,11 +74,11 @@ This will open the option menu. You will want to select Interface Options, and t
 
 ## Running the Application 🚀
 
-With the dependencies installed, you're now ready to run the application. Ensure you're in the project's root directory and your virtual environment is activated.
 
-To run the Flask API & Hardware:
 
-<pre><code>python app.py
+To run the Hardware:
+
+<pre><code>python app/utils/main.py
 </code></pre>
 
 ## Debugging
