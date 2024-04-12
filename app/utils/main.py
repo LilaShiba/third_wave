@@ -249,13 +249,15 @@ def record_sensor_data(csv_file_path: str, duration_seconds: int, hertz: int = 1
 if __name__ == "__main__":
     # Define CSV file path and duration
     csv_file_path = f'data/sensor_data_{datetime.now().strftime("%Y-%m-%dT%H:%M")}.csv'
-    data_transport = Transport(file_path=f'data/sensor_data_{datetime.now().strftime("%Y-%m-%dT%H:%M")}.csv')
+    data_transport = Transport(file_path=csv_file_path)
     duration_seconds = 60  
     frequency = 60
     # Record sensor data
     init_trellis()
+    print('Env-Sense Start')
     record_sensor_data(csv_file_path, duration_seconds, frequency)  
     print(f'Data recorded to {csv_file_path}')
+    print('transporting data')
     data_transport.main()
     print('batch sent | 200')
 
