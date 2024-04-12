@@ -62,20 +62,6 @@ The following components are utilized in the system:
    - Once the recording duration is complete, the CSV file containing logged data is sent to the AWS backend.
    - The CSV file is then earsed to ensure ample space on the RPi. For example, it's common for csv files to reach over 20 megabites!
 
-## Indicator Light Explanation
-
-The following table explains the colors and ranges for each indicator light:
-
-| Indicator  | Blue (Low)       | Green        | Yellow       | Orange       | Red (High)   |
-| ---------- | ---------------- | ------------ | ------------ | ------------ | ------------ |
-| Humidity   | 0% - 25%         | 26% - 50%    | 51% - 75%    | 76% - 100%   | N/A          |
-| Pressure   | 0 hPa - 1250 hPa | 1251 hPa - 2500 hPa | 2501 hPa - 3750 hPa | 3751 hPa - 5000 hPa | N/A |
-| Lux        | 0 lux - 1250 lux | 1251 lux - 2500 lux | 2501 lux - 3750 lux | 3751 lux - 5000 lux | N/A |
-| Gas        | 0 ppm - 50000 ppm | 50001 ppm - 100000 ppm | 100001 ppm - 150000 ppm | 150001 ppm - 200000 ppm | N/A |
-| Proximity  | 0 cm - 2.5 cm    | 2.6 cm - 5 cm| 5.1 cm - 7.5 cm| 7.6 cm - 10 cm| N/A          |
-| GPS        | N/A              | N/A          | N/A          | N/A          | N/A          |
-
-
 ### Sensor Integration and Sources
 
 - **Adafruit LSM9DS1:** Accelerometer, Gyro, Magnetometer [Info](https://learn.adafruit.com/adafruit-lsm9ds1-accelerometer-plus-gyro-plus-magnetometer-9-dof-breakout/pinouts)
