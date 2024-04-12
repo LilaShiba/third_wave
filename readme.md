@@ -10,7 +10,9 @@ After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Raspbian was chosen fo
 - **RPI Board** ⚡: [RPI Documentation](https://github.com/LilaShiba/third_wave/blob/main/board_readme.md)
 
 # High-Level System Overview ✨
-The main files are located in 'app/utils' and included the main.py, send_data.py, and debug/data folders.
+The main files are located in 'app/utils' and included the [main.py](https://github.com/LilaShiba/third_wave/blob/main/app/utils/main.py) & [send_code.py](https://github.com/LilaShiba/third_wave/blob/main/app/utils/send_code.py)
+
+
 ## Environmental Monitoring System
 
 The Environmental Monitoring System described here integrates various sensors to monitor environmental parameters and log data to a CSV file. Additionally, it utilizes indicator lights for real-time visualization of sensor readings.
@@ -71,14 +73,6 @@ The following components are utilized in the system:
 ### Hardware Connection Guide
 
 [Hardware Wiring Instructions](https://www.circuito.io/app?components=9443,12787,164792,200000,243599,488167,763365,779831)
-
-## Development Guide 🛠🧰
-
-### Connecting Hardware
-
-- **Module:** `app/utils/rpi.py`
-  - Acts as the bridge for communication with I2C sensors and devices connected to the Raspberry Pi.
-
 
 ### Running the Application 🚀
 
