@@ -85,7 +85,7 @@ The following table explains the colors and ranges for each indicator light:
 
 ### Hardware Connection Guide
 
-[Hardware Wiring Instructions](https://www.circuito.io/app?components=639,9443,44359,200000,779831)
+[Hardware Wiring Instructions](https://www.circuito.io/app?components=9443,12787,164792,200000,243599,488167,763365,779831)
 
 ## Development Guide 🛠🧰
 
