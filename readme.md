@@ -10,7 +10,7 @@ After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Raspbian was chosen fo
 - **RPI Board** ⚡: [RPI Documentation](https://github.com/LilaShiba/third_wave/blob/main/board_readme.md)
 
 # High-Level System Overview ✨
-
+The main files are located in 'app/utils' and included the main.py, send_data.py, and debug/data folders.
 ## Environmental Monitoring System
 
 The Environmental Monitoring System described here integrates various sensors to monitor environmental parameters and log data to a CSV file. Additionally, it utilizes indicator lights for real-time visualization of sensor readings.
