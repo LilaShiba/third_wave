@@ -8,7 +8,6 @@ After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Raspbian was chosen fo
 
 - **Main Landing Page** ❤️✨: [Readme.md](https://github.com/LilaShiba/third_wave/blob/main/readme.md)
 - **RPI Board** ⚡: [RPI Documentation](https://github.com/LilaShiba/third_wave/blob/main/board_readme.md)
-- **OS Choice** 🌟: [os.md](https://github.com/LilaShiba/third_wave/blob/main/os.md)
 
 # High-Level System Overview ✨
 
