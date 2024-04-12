@@ -94,10 +94,6 @@ The following table explains the colors and ranges for each indicator light:
 - **Module:** `app/utils/rpi.py`
   - Acts as the bridge for communication with I2C sensors and devices connected to the Raspberry Pi.
 
-### Expanding the Application
-
-- **Module:** `app/api/new_route.py`
-  - Implement new routes here and register them within `app/__init__.py`.
 
 ### Running the Application 🚀
 
