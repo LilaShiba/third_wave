@@ -1,4 +1,4 @@
-# 🌈🤖 RPI Server Documentation 🌟🔧
+# 🌈🤖 🌟🔧
 
 Video Demo of larger product: [video](https://www.youtube.com/watch?v=wGUgLWJEKcA)
 
