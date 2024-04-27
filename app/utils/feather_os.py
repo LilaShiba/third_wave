@@ -6,8 +6,15 @@ from adafruit_apds9960.apds9960 import APDS9960
 import adafruit_bme680
 import adafruit_gps
 from adafruit_neotrellis.neotrellis import NeoTrellis
-import adafruit_lsm9ds1
 import adafruit_tsl2591
+import adafruit_lsm9ds1
+
+import time
+import board
+import busio
+import adafruit_lsm9ds1
+
+
 
 OFF = (0, 0, 0)
 
@@ -18,9 +25,10 @@ class Device:
         self.sensor_bme680 = adafruit_bme680.Adafruit_BME680_I2C(self.i2c)
         self.gps = adafruit_gps.GPS_GtopI2C(self.i2c, debug=False)
         self.trellis = NeoTrellis(self.i2c)
-        self.sensor_lsm9ds1 = adafruit_lsm9ds1.LSM9DS1_I2C(self.i2c)
+        self.sensor_lsm9ds1  = adafruit_lsm9ds1.LSM9DS1_I2C(self.i2c)
         self.trellis.brightness = 0.8
         self.init_trellis()
+
         self.sensor_tsl2591 = adafruit_tsl2591.TSL2591(self.i2c)
         self.sensor_tsl2591.gain = adafruit_tsl2591.GAIN_LOW
         print('all sensors loaded')
@@ -82,10 +90,13 @@ class Device:
     
     def read_lsm9ds1(self):
         """Reads Accel, Gyro, and Magnometer from the LSM9DS1"""
-        acc = self.sensor_lsm9ds1.acceleration
-        gyro = self.sensor_lsm9ds1.gyro
-        mag = self.sensor_lsm9ds1.magnetic
-        return acc, gyro, mag
+        
+
+        acc_x, acc_y, acc_z = self.sensor_lsm9ds1.acceleration
+        gyro_x, gyro_y, gyro_z = self.sensor_lsm9ds1.gyro
+        mag_x, mag_y, mag_z = self.sensor_lsm9ds1.magnetic
+  
+        return [(acc_x, acc_y, acc_z), (gyro_x, gyro_y, gyro_z), (mag_x, mag_y, mag_z)]
 
     def read_bme680(self):
         temperature = self.sensor_bme680.temperature
@@ -184,7 +195,7 @@ class Device:
                 self.trellis.pixels[i] = OFF
 
     def main(self):
-        frequency = 60 
+        frequency = 60 # Default frequency in Hertz
         interval = 1 / frequency
         b = 0
         while True:
@@ -198,6 +209,7 @@ class Device:
 
             self.env_check(humidity, pressure, lux, gas, proximity, b, (latitude, longitude), tsl2591_lux, tsl2591_ir, accel, gyro, magno, bme680_temp)
 
+            # Adjust sleep time based on Hertz
             elapsed_time = time.time() - start_time
             b += 1
             if elapsed_time < interval:
