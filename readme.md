@@ -12,8 +12,7 @@ After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Raspbian was chosen fo
 - **RPI Board** ⚡: [RPI Documentation](https://github.com/LilaShiba/third_wave/blob/main/board_readme.md)
 
 # High-Level System Overview ✨
-The main files are located in 'app/utils' and included the [main.py](https://github.com/LilaShiba/third_wave/blob/main/app/utils/main.py) & [send_code.py](https://github.com/LilaShiba/third_wave/blob/main/app/utils/send_code.py)
-
+The main files are located in 'app/utils' and included the [main.py](https://github.com/LilaShiba/third_wave/blob/main/app/utils/main.py) 
 
 ## Environmental Monitoring System
 
