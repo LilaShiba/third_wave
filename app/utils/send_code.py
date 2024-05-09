@@ -9,7 +9,7 @@ class Transport:
         # Customized for AWS 
         self.file_path = file_path
         self.sensor_data = []
-        self.url = "http://3.228.67.119:5000/sensordata/insert-sensor-data"
+        self.url = "http://XXXXXXXXXXXX:5000/sensordata/insert-sensor-data"
         self.headers = {'Content-Type': 'application/json'}
         self.formatted_data = []
         self.json_data_with_backslashes = None
