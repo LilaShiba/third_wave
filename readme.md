@@ -1,8 +1,4 @@
-# 🌈🤖 🌟🔧
-
-## OS Selection for RPI 🌟
-
-After evaluating Raspbian, Ubuntu, and Fedora IoT (FIoT), Raspbian was chosen for its optimal balance of lightweight design and reliability. Raspbian did encounter issues with I2C interfacing, and Ubuntu was deemed too resource-intensive. Documentation for Raspbian is retained in anticipation of future improvements and for showing the work-arounds.
+# Tricorder 
 
 ## Documentation Links ❤️🔥⚡
 
